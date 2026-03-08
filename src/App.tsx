@@ -637,42 +637,6 @@ export default function App() {
             <div>
               <div className="flex items-center justify-between mb-1.5">
                 <label className="block text-xs font-bold text-white/50 uppercase tracking-wider">Event Summary</label>
-                <button 
-                  onClick={async () => {
-                    try {
-                      const { GoogleGenAI } = await import('@google/genai');
-                      const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-                      
-                      // Gather context
-                      const eventIndex = events.findIndex(e => e.id === selectedEvent.id);
-                      const previousEvents = events.slice(0, eventIndex).map(e => `${e.title}: ${e.summary}`).join('\n');
-                      
-                      const prompt = `I am writing a thriller/horror story. 
-Here is what happened so far:
-${previousEvents}
-
-I am currently stuck on an event called "${selectedEvent.title}" which is a "${selectedEvent.type}" event.
-The tension level is ${selectedEvent.tension}/10.
-Location: ${selectedEvent.location || 'Unknown'}
-
-Please give me 3 short, punchy ideas (1-2 sentences each) for what could happen in this scene to increase the tension or move the plot forward.`;
-
-                      const response = await ai.models.generateContent({
-                        model: 'gemini-3-flash-preview',
-                        contents: prompt,
-                      });
-                      
-                      alert(response.text);
-                    } catch (error) {
-                      console.error('Error generating idea:', error);
-                      alert('Failed to generate idea. Please check your API key.');
-                    }
-                  }}
-                  className="text-xs text-red-500 font-bold hover:text-red-400 flex items-center gap-1"
-                >
-                  <Activity className="w-3 h-3" />
-                  Idea Generator
-                </button>
               </div>
               <textarea 
                 value={selectedEvent.summary}
